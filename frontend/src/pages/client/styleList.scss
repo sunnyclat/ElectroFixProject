@@ -1,0 +1,23 @@
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 20px;
+  margin-top: 20px;
+}
+thead {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 20px;
+  justify-content: "flex-end";
+}
+
+th,
+td {
+  padding: 10px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+.footer {
+  margin-top: 400px; /* Espacio en blanco arriba del botón */
+}

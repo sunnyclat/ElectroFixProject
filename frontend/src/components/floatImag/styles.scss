@@ -1,0 +1,42 @@
+@import "../../assets/scss/colors.scss";
+
+.floatImag {
+  /*
+  display: flex;
+  align-items: center;
+
+  position: fixed;
+
+
+  font-size: 1rem;
+
+  right: 20rem;
+
+  */
+  //z-index: 9999;
+
+  z-index: 2;
+  position: fixed;
+
+  justify-content: right;
+
+  display: flex;
+
+  right: 0rem;
+  top: 10rem;
+  padding: 15px;
+  transition: top 0.3s;
+
+  padding: 15px 33px;
+
+  .FloatIconImg {
+    width: 3rem;
+    //  position: absolute;
+    top: 14px;
+    left: -15px;
+  }
+}
+
+.floatImag:is(header.shrink + .AppWrapper .floatImag) {
+  top: 5rem;
+}

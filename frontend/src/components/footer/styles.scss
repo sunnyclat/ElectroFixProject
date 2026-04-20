@@ -1,0 +1,75 @@
+@import "../../assets/scss/colors.scss";
+@import "../../assets/scss/fonts.scss";
+
+footer {
+  background-color: $black;
+  color: $white;
+
+  .card-wrapper {
+    width: 100%; 
+    overflow: hidden;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 16px;
+  //  flex-wrap: wrap;
+
+
+
+  
+  }
+
+  .card {
+    justify-content: space-around;
+    align-items: flex-start;
+    flex: 1;
+
+   
+    padding: 12px;
+    margin: 21px;
+    width: 90% 
+//   margin: 10px 
+  }
+
+  h2 {
+    margin-top: -20px;
+    font-weight: 300;
+    font-family: $headline;
+    margin-bottom: 10px;
+
+    font-size: 25px;
+  }
+
+
+
+
+  p {
+    margin-bottom: 20px;
+
+    font-size: 14px;
+
+    a {
+      font-size: 15px;
+      text-decoration: underline;
+      // font-family: $headline;
+    }
+  }
+
+  .imagenes {
+    margin-bottom: 20px;
+    margin-top: 30px;
+
+    display: flex;
+    flex-direction: row;
+
+    li {
+      margin-right: 2rem;
+      &:last-child {
+        margin-right: 0;
+      }
+    }
+  }
+
+  .imagenes {
+    align-items: center;
+  }
+}

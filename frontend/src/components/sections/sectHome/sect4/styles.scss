@@ -1,0 +1,28 @@
+@import "../../../../assets/scss/colors.scss";
+@import "../../../../assets/scss/fonts.scss";
+.section4 {
+  background-color: $grey;
+  padding: 3rem 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 2rem;
+  h2{
+    font-family: $headline;
+    font-weight: 300;
+    @media screen and (min-width: 320px) {
+      font-size: 1.5rem;
+    }
+    @media screen and (min-width: 768px) {
+      font-size: 2rem;
+    }
+    @media screen and (min-width: 1024px) {
+      font-size: 3.5rem;
+    }
+  }
+  .imageSect4Container {
+    padding-top: 2rem;
+    width: 60%;
+    height: auto
+  }
+}

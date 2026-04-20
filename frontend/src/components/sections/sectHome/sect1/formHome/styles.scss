@@ -1,0 +1,55 @@
+@import "../../../../../assets/scss/colors.scss";
+.formHome {
+  background-color: $white;
+  // border-radius: 10px ;
+
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
+
+  .form {
+    margin-top: 1rem;
+    /* &.Check {
+      background-color: aqua;
+      align-items: center;
+    } */
+  }
+  .secondForm {
+    width: 90%;
+    margin-top: 15px;
+    display: flex;
+    justify-content: space-evenly;
+
+    .block1 {
+      width: 50%;
+      #products {
+        width: 100%;
+        height: 30px;
+        border-radius: 50px;
+        padding-left: 1rem;
+        background-color: $black;
+        color: $white;
+        option {
+          background-color: $white;
+          color: $black;
+        }
+      }
+    }
+    .block2 {
+      width: 50%;
+      display: flex;
+      justify-content: flex-end;
+      align-items: flex-end;
+      .sendForm {
+        padding: 1rem 1.5rem;
+        border-radius: 15px;
+        background-color: $primary-color;
+        color: $white;
+        border: none;
+      }
+    }
+  }
+}

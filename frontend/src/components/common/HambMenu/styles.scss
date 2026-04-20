@@ -1,0 +1,73 @@
+@import "../../../assets/scss/colors.scss";
+.hamburger-menu {
+  position: relative;
+  background-color: transparent;
+  width: 15px;
+  height: 1px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  margin-right: 20px;
+
+
+
+
+  .toggle-button {
+    background-color: transparent;
+    border: none;
+    z-index: 1;
+
+
+    margin-top: -20px;
+
+  }
+  .bar1,
+  .bar2,
+  .bar3 {
+    width: 98%;
+    height: 3px;
+    margin: 7px 0;
+    background-color: $black;
+    transition: 0.4s;
+
+  }
+
+  &.open {
+
+
+
+
+    .bar1 {
+      transform: rotate(-45deg) translate(-8px, 4px);
+
+    }
+
+    .bar2 {
+      opacity: 0;
+    }
+
+    .bar3 {
+      transform: rotate(45deg) translate(-9px, -6px);
+    }
+  }
+
+  .menu-content {
+    display: flex;
+    flex-direction: column;
+    z-index: 0;
+    transition: left 0.3s ease-in-out;
+    top: -30px;
+    left: 400px;
+    position: absolute;
+    background-color: $white;
+
+
+
+    &.open {
+      left: -100px;
+
+
+    }
+  }
+}

@@ -1,0 +1,45 @@
+@import "../../../../../assets/scss/fonts.scss";
+.cardWrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  border: 1px solid black;
+  //    border-radius: 24px;
+  width: 14rem;
+  height: 14rem;
+  padding-top: 2rem;
+
+
+
+  @media screen and (max-width: 600px) {
+
+
+
+
+   width:9.6rem;
+    
+  }
+  
+
+  
+
+
+  .ImageCardContainer {
+    width: 3rem;
+  }
+  .cardTxt {
+    flex-grow: 1;
+    display: flex;
+    justify-content: end;
+    align-items: center;
+    h2{
+      font-family: $secondary-font;
+      font-weight: 100;
+      font-size: 1.5rem;
+    }
+    p {
+      padding-inline: 0.5rem;
+    }
+  }
+}

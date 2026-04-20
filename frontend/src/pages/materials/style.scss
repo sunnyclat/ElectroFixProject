@@ -1,0 +1,64 @@
+@import '../../assets/scss/globalStyles.scss';
+@import '../../assets/scss/colors.scss';
+
+.materialsWrapper{
+    .title {
+        font-size: 3rem;
+        text-align: center;
+        color: $primary-color;
+        text-transform: uppercase;
+        font-weight: 600;
+        padding: 20px;
+    }
+    .homeBtn{
+        margin-left: 45%;
+        color: $primary-color;
+        &:hover{
+            text-decoration: underline;
+        }
+    }
+
+}
+
+
+.materialsForm {
+    display: flex;
+    padding: 0;
+    margin: 0;
+    flex-direction: column;
+    margin-left: 30%;
+    width: 40%;
+    gap: 15px;
+
+    .formItem{
+        height: 2rem;
+        padding: 0.5rem;
+        border-radius: 5px;
+        border: solid 1px $primary-color;
+        width: 100%;
+        &:focus{
+            outline: none;
+        }
+    }
+
+    .submitBtn{
+        background-color: $secondary-color;
+        cursor: pointer;
+        border-style: none;
+        text-transform: uppercase;
+        width: 40%;
+        align-self: center;
+        height: 2rem;
+        padding: 5px 15px;
+        border-radius: 5px;
+        margin-bottom: 20px;
+        &:hover{
+            border: solid 2px $primary-color;
+        }
+    }
+
+    .error{
+        text-align: center;
+        color:$primary-color;
+    }    
+}

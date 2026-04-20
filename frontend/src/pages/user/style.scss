@@ -1,0 +1,29 @@
+@import "../../assets/scss/colors.scss";
+@import "../../assets//scss/fonts.scss";
+
+.userWraper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+
+  h1 {
+    text-align: center;
+    margin-bottom: 60px;
+    padding-top: 2.5rem;
+    color: $primary-color;
+  }
+
+
+.form-group {
+    width: 300px;
+}
+
+.confirm {
+    display: flex;
+    margin-top: 10px;
+    margin-left: 80px;
+
+
+}
