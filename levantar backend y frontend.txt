@@ -1,0 +1,11 @@
+# Terminal 1 - Backend http://localhost:4200
+cd backend
+node src/index.js
+
+# Terminal 2 - Frontend  http://localhost:3000
+cd frontend
+npm run dev
+
+
+
+

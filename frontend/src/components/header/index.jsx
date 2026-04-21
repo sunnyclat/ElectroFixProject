@@ -40,19 +40,23 @@ const Header = () => {
   };
   return (
     <header className={`header ${isScrolled ? "shrink" : ""}`}>
-      <Image className={`logo`} src={Logo} alt="logo" />
+      <Link to="/">
+        <Image className={`logo`} src={Logo} alt="logo" />
+      </Link>
 
       <div
         className="MenuDesktop"
         style={{ display: showMobile ? "none" : "flex" }}
       >
         <div className="loginContainer">
+          <Link to="/login-admin" className="adminBtn">Admin</Link>
+          <Link to="/registro" className="registerBtn">Registrarse</Link>
           <a>{user}</a>
           <Image className={"UserIcon"} src={UserIcon} alt="userIcon" />
         </div>
         <ul className="navigationContainer">
           <li>
-            <a href="">Home</a>
+            <Link to="/">Home</Link>
           </li>
           <li>
             <a href="">Servicios</a>
@@ -80,31 +84,19 @@ const Header = () => {
               <li>
                 <Image className={"imgHM"} src={HomeImg} alt="home" />
                 <p>
-                  <a href="">Home</a>
-                </p>
-              </li>
-              <li>
-                <Image className={"imgHM"} src={ServicesImg} alt="services" />
-                <p>
-                  <a href="">Servicios</a>
-                </p>
-              </li>
-              <li>
-                <Image className={"imgHM"} src={ProcessImg} alt="process" />
-                <p>
-                  <a href="">Proceso</a>
-                </p>
-              </li>
-              <li>
-                <Image className={"imgHM"} src={BlogImg} alt="blog" />
-                <p>
-                  <a href="">Blog</a>
+                  <Link to="/">Home</Link>
                 </p>
               </li>
               <li>
                 <Image className={"imgHM"} src={LoginImg} alt="login" />
                 <p>
-                  <a href="">Login</a>
+                  <Link to="/registro">Registrarse</Link>
+                </p>
+              </li>
+              <li>
+                <Image className={"imgHM"} src={LoginImg} alt="admin" />
+                <p>
+                  <Link to="/login-admin">Admin</Link>
                 </p>
               </li>
               <li>

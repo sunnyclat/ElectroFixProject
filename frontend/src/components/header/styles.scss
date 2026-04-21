@@ -46,6 +46,26 @@ width: 100vw;
       display: flex;
       flex-direction: row;
       align-items: center;
+      .registerBtn {
+        background-color: $secondary-color;
+        padding: 0.5rem 1rem;
+        border-radius: 4px;
+        font-size: 1rem;
+        margin-right: 1rem;
+        &:hover {
+          background-color: darken($secondary-color, 10%);
+        }
+      }
+      .adminBtn {
+        background-color: #333;
+        padding: 0.5rem 1rem;
+        border-radius: 4px;
+        font-size: 1rem;
+        margin-right: 1rem;
+        &:hover {
+          background-color: #555;
+        }
+      }
       .UserIcon {
         width: 1.3rem;
         margin-left: 0.5rem;

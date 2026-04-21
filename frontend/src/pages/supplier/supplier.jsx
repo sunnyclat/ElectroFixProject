@@ -75,8 +75,8 @@ const Supplier = () => {
           Enviar
         </Button>
       </form>
-      <NavLink to={"/"} className={"homeBtn"}>
-        ← Volver al inicio
+      <NavLink to={"/admin"} className={"homeBtn"}>
+        ← Volver al Admin
       </NavLink>
     </div>
   );

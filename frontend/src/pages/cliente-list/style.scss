@@ -1,0 +1,63 @@
+.listaPage {
+  padding: 2rem;
+  margin-top: 8rem;
+  min-height: calc(100vh - 10rem);
+  background-color: #f5f5f5;
+
+  h1 {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 2rem;
+    color: #333;
+    margin-bottom: 2rem;
+  }
+
+  .tablaUsuarios {
+    width: 100%;
+    background: white;
+    border-collapse: collapse;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+
+    thead {
+      background-color: #ff6b35;
+      color: white;
+
+      th {
+        padding: 1rem;
+        text-align: left;
+        font-family: 'Montserrat', sans-serif;
+      }
+    }
+
+    tbody {
+      tr {
+        border-bottom: 1px solid #eee;
+
+        &:hover {
+          background-color: #f9f9f9;
+        }
+
+        td {
+          padding: 1rem;
+          color: #333;
+        }
+      }
+    }
+  }
+
+  .backBtn {
+    display: inline-block;
+    margin-top: 2rem;
+    padding: 0.75rem 1.5rem;
+    background-color: #333;
+    color: white;
+    text-decoration: none;
+    border-radius: 4px;
+    font-family: 'Montserrat', sans-serif;
+
+    &:hover {
+      background-color: #555;
+    }
+  }
+}

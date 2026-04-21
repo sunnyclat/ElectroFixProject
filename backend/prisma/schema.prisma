@@ -105,14 +105,14 @@ model ReparacionNomenclada {
 model Recepcion {
   id           Int           @id @default(autoincrement())
   first_name   String
-  last_name    String
-  email        String        @unique
+  last_name    String        @default("")
+  email        String        
   telefono     String        @db.VarChar(15)
   equipo       String
-  tipo         String
+  tipo         String        @default("")
   descripcion  String        @db.Text // 65,535
-  employee_id  Int
-  Employee     Usuario       @relation(fields: [employee_id], references: [id])
+  employee_id  Int?
+  Employee     Usuario?      @relation(fields: [employee_id], references: [id])
   createdAt    DateTime      @default(now())
   updatedAt    DateTime      @updatedAt
   presupuestos Presupuesto[]
@@ -131,5 +131,6 @@ model Turno {
   createdAt    DateTime      @default(now())
   updatedAt    DateTime      @updatedAt
 
+  @@index([email])
   @@map("turnos")
 }

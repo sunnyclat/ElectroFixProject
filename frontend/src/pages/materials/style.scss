@@ -12,9 +12,15 @@
     }
     .homeBtn{
         margin-left: 45%;
-        color: $primary-color;
+        color: white;
+        background-color: #333;
+        padding: 0.75rem 1.5rem;
+        border-radius: 4px;
+        text-decoration: none;
+        display: inline-block;
+        margin-top: 1rem;
         &:hover{
-            text-decoration: underline;
+            background-color: #555;
         }
     }
 

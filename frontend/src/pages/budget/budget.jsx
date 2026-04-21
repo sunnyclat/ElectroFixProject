@@ -109,8 +109,8 @@ const Budget = () => {
           Enviar
         </button>
       </form>
-      <Link to="/" className="homeBtn">
-        ← Volver al inicio
+      <Link to="/admin" className="homeBtn">
+        ← Volver al Admin
       </Link>
     </div>
   )

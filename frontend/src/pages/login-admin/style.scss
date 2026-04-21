@@ -1,0 +1,88 @@
+.loginPage {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background-color: #f5f5f5;
+  margin-top: -8rem;
+
+  .loginCard {
+    background: white;
+    padding: 2.5rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    width: 100%;
+    max-width: 400px;
+    text-align: center;
+
+    h1 {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 1.8rem;
+      color: #333;
+      margin-bottom: 0.5rem;
+    }
+
+    p {
+      color: #666;
+      margin-bottom: 2rem;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+
+      input {
+        padding: 0.75rem 1rem;
+        border: 1px solid #ddd;
+        border-radius: 6px;
+        font-size: 1rem;
+        font-family: 'Montserrat', sans-serif;
+
+        &:focus {
+          outline: none;
+          border-color: #ff6b35;
+        }
+      }
+
+      .error {
+        color: #e74c3c;
+        font-size: 0.9rem;
+        margin: 0;
+      }
+
+      button {
+        padding: 0.75rem;
+        background-color: #ff6b35;
+        color: white;
+        border: none;
+        border-radius: 6px;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background-color 0.2s;
+
+        &:hover:not(:disabled) {
+          background-color: #e55a2b;
+        }
+
+        &:disabled {
+          background-color: #ccc;
+          cursor: not-allowed;
+        }
+      }
+    }
+
+    .backLink {
+      display: block;
+      margin-top: 1.5rem;
+      color: #666;
+      text-decoration: none;
+      font-size: 0.9rem;
+
+      &:hover {
+        color: #333;
+      }
+    }
+  }
+}

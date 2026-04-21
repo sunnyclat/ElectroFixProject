@@ -76,9 +76,9 @@ const Materials = () => {
         </button>
 
       </form>
-      <Link to="/" className="homeBtn">
+      <Link to="/admin" className="homeBtn">
         {" "}
-        ← Volver al inicio
+        ← Volver al Admin
       </Link>
     </div>
   )
