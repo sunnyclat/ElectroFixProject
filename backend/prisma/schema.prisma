@@ -61,7 +61,7 @@ model Usuario {
   id            Int           @id // DNI
   first_name    String
   last_name     String
-  telefono      Int           
+  telefono      Int
   email         String        @unique
   cuit          String        @unique @db.VarChar(32)
   condicion_iva String        @default("Consumidor final")
@@ -103,19 +103,20 @@ model ReparacionNomenclada {
 }
 
 model Recepcion {
-  id           Int           @id @default(autoincrement())
-  first_name   String
-  last_name    String        @default("")
-  email        String        
-  telefono     String        @db.VarChar(15)
-  equipo       String
-  tipo         String        @default("")
-  descripcion  String        @db.Text // 65,535
-  employee_id  Int?
-  Employee     Usuario?      @relation(fields: [employee_id], references: [id])
-  createdAt    DateTime      @default(now())
-  updatedAt    DateTime      @updatedAt
-  presupuestos Presupuesto[]
+  id              Int           @id @default(autoincrement())
+  first_name      String
+  last_name       String        @default("")
+  email           String        
+  telefono        String        @db.VarChar(15)
+  equipo          String
+  tipo            String        @default("")
+  descripcion     String        @db.Text // 65,535
+  fecha_visita    DateTime?
+  employee_id     Int?
+  Employee        Usuario?      @relation(fields: [employee_id], references: [id])
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+  presupuestos    Presupuesto[]
 
   @@map("recepciones")
 }

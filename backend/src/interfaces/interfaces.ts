@@ -59,5 +59,15 @@ export class SD {
      * Technician
      */
     EMPLOYEE: "empleado",
+    TECHNICIAN: "tecnico",
+    ADMINISTRATIVE: "administrativo",
+    CUSTOMER_SUPPORT: "atencion al cliente",
   };
+
+  static readonly EMPLOYEE_ROLE_DESCRIPTIONS = [
+    SD.ROLES.EMPLOYEE,
+    SD.ROLES.TECHNICIAN,
+    SD.ROLES.ADMINISTRATIVE,
+    SD.ROLES.CUSTOMER_SUPPORT,
+  ];
 }

@@ -1,12 +1,12 @@
 import { Handler, RequestParamHandler } from "express";
 import { prisma } from "..";
-import { CustomError, MaterialsRequest, SD } from "../interfaces/interfaces";
+import { CustomError, MaterialsRequest } from "../interfaces/interfaces";
 import { Material } from "@prisma/client";
 
 export class Materiales {
   static index: Handler = async (req, res, next) => {
     try {
-      let mat = await prisma.material.findMany({
+      const materiales = await prisma.material.findMany({
         include: {
           Proveedor: {
             select: {
@@ -20,9 +20,12 @@ export class Materiales {
             },
           },
         },
+        orderBy: {
+          createdAt: "desc",
+        },
       });
 
-      res.json(mat);
+      res.json(materiales);
     } catch (e) {
       next(e);
     } finally {
@@ -30,90 +33,152 @@ export class Materiales {
     }
   };
 
-  //////
   static show: Handler = async (req: MaterialsRequest, res, next) => {
     prisma.$disconnect();
 
     if (!req.Materials) return next(new Error());
 
-    res.json(req.Materials);
+    res.json(req.Materials[0]);
   };
 
   static create: Handler = async (req, res, next) => {
-    let data: Omit<Material, 'id' | 'createdAt' | 'updatedAt'> = req.body;
+    const data: Omit<Material, "id" | "createdAt" | "updatedAt"> = req.body;
 
- 
-
-
-    try {
-      let mat = await prisma.material.create({ data });
-      res.json(mat);
-    } catch (e) {
-      next(e);
-    }
-  }
-
-  public static update: Handler = async (req: MaterialsRequest, res, next) => {
-
-
-
-    let data: Omit<Material, 'createdAt' | 'updatedAt'> = req.body;
-
-    try {
-      let mat = await prisma.material.update({
-        where: {
-          id: data.id,
-        },
-        data,
-      });
-      res.json(mat);
-    } catch (e) {
-      next(e);
-    } finally {
-      prisma.$disconnect();
-    }
-  }
-
-  public static delete: Handler = async (req: MaterialsRequest, res, next) => {
-
-    if (!req.Materials) {
-      let err = new CustomError('Not found');
-      err.name = "404";
-      return next(err);
-  }
-  try {
-    await prisma.material.delete({
-      where: {
-        id: req.Materials[0].id,
-      },
-    });
-    res.send();
-  } catch (e) {
-    next(e);
-  } finally {
-    prisma.$disconnect();
-  }
-};
-
-
-  ///////////////////////
-
-  public static MaterialsRequestHandler: RequestParamHandler = async (
-    req: MaterialsRequest,
-    res,
-    next,
-    materials_id
-  ) => {
-    let mat: Material | null;
-    let validated = parseInt(materials_id);
-    if (isNaN(validated)) {
-      let err = new CustomError("materials_Id debe ser int");
+    if (
+      !data.name?.trim() ||
+      !data.descripcion?.trim() ||
+      Number.isNaN(Number(data.stock)) ||
+      Number.isNaN(Number(data.costo)) ||
+      Number.isNaN(Number(data.proveedor_id))
+    ) {
+      const err = new CustomError("Todos los campos del material son obligatorios");
       err.name = "400";
       return next(err);
     }
 
     try {
-      mat = await prisma.material.findUnique({
+      const proveedor = await prisma.proveedor.findUnique({
+        where: {
+          id: Number(data.proveedor_id),
+        },
+      });
+
+      if (!proveedor) {
+        const err = new CustomError("El proveedor seleccionado no existe");
+        err.name = "400";
+        return next(err);
+      }
+
+      const material = await prisma.material.create({
+        data: {
+          ...data,
+          name: data.name.trim(),
+          descripcion: data.descripcion.trim(),
+          stock: Number(data.stock),
+          costo: Number(data.costo),
+          proveedor_id: Number(data.proveedor_id),
+        },
+      });
+
+      res.json(material);
+    } catch (e) {
+      next(e);
+    }
+  };
+
+  public static update: Handler = async (req: MaterialsRequest, res, next) => {
+    if (!req.Materials) return;
+
+    const old = req.Materials[0];
+    const data: Omit<Material, "createdAt" | "updatedAt"> = req.body;
+
+    if (
+      !data.name?.trim() ||
+      !data.descripcion?.trim() ||
+      Number.isNaN(Number(data.stock)) ||
+      Number.isNaN(Number(data.costo)) ||
+      Number.isNaN(Number(data.proveedor_id))
+    ) {
+      const err = new CustomError("Todos los campos del material son obligatorios");
+      err.name = "400";
+      return next(err);
+    }
+
+    try {
+      const proveedor = await prisma.proveedor.findUnique({
+        where: {
+          id: Number(data.proveedor_id),
+        },
+      });
+
+      if (!proveedor) {
+        const err = new CustomError("El proveedor seleccionado no existe");
+        err.name = "400";
+        return next(err);
+      }
+
+      const material = await prisma.material.update({
+        where: {
+          id: old.id,
+        },
+        data: {
+          ...data,
+          id: old.id,
+          name: data.name.trim(),
+          descripcion: data.descripcion.trim(),
+          stock: Number(data.stock),
+          costo: Number(data.costo),
+          proveedor_id: Number(data.proveedor_id),
+        },
+      });
+
+      res.json(material);
+    } catch (e) {
+      next(e);
+    } finally {
+      prisma.$disconnect();
+    }
+  };
+
+  public static delete: Handler = async (req: MaterialsRequest, res, next) => {
+    if (!req.Materials) {
+      const err = new CustomError("Not found");
+      err.name = "404";
+      return next(err);
+    }
+
+    try {
+      await prisma.material.delete({
+        where: {
+          id: req.Materials[0].id,
+        },
+      });
+
+      res.send();
+    } catch (e) {
+      next(e);
+    } finally {
+      prisma.$disconnect();
+    }
+  };
+
+  public static MaterialsRequestHandler: RequestParamHandler = async (
+    req: MaterialsRequest,
+    res,
+    next,
+    id
+  ) => {
+    let material: Material | null;
+    const validated = parseInt(id);
+
+    if (isNaN(validated)) {
+      const err = new CustomError("materialId debe ser int");
+      err.name = "400";
+      return next(err);
+    }
+
+    try {
+      material = await prisma.material.findUnique({
         where: {
           id: validated,
         },
@@ -134,13 +199,14 @@ export class Materiales {
     } catch (e) {
       return next(e);
     }
-    if (!mat) {
-      let err = new CustomError("Material no encontrado");
+
+    if (!material) {
+      const err = new CustomError("Material no encontrado");
       err.name = "404";
       return next(err);
     }
-    req.Materials = [mat];
 
+    req.Materials = [material];
     next();
   };
 }

@@ -1,56 +1,94 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 
 import "./style.scss";
 
 const BASE_URL = "/api";
+const EMPLOYEE_ROLE_OPTIONS = ["tecnico", "administrativo", "atencion al cliente"];
+
+const initialUsuario = {
+  id: "",
+  first_name: "",
+  last_name: "",
+  email: "",
+  password: "",
+  telefono: "",
+  rol: "",
+};
 
 const User = () => {
-  const [usuario, setUsuario] = useState({
-    id: "",
-    first_name: "",
-    last_name: "",
-    email: "",
-    password: "",
-    cuit: "",
-    telefono: "",
-    condicion_iva: "",
-    rol: 0,
-  });
-
-  const [mostrarSeleccionarRol, setMostrarSeleccionarRol] = useState(true);
-  const formRef = React.createRef();
-
+  const [usuario, setUsuario] = useState(initialUsuario);
+  const [roles, setRoles] = useState([]);
+  const formRef = useRef(null);
 
   useEffect(() => {
-    if (usuario.rol !== 0) {
-      fetch(BASE_URL + `/usuario/${usuario.rol}`)
-        .then((response) => response.json())
-        .then((data) => {
-          console.log("Datos de rol del servidor: ", data);
+    const loadRoles = async () => {
+      try {
+        const response = await fetch(BASE_URL + "/rol");
+        const data = await response.json();
+        const currentRoles = Array.isArray(data) ? data : [];
+        const existingDescriptions = currentRoles.map((rol) =>
+          rol.descripcion?.toLowerCase()
+        );
+        const missingRoles = EMPLOYEE_ROLE_OPTIONS.filter(
+          (descripcion) => !existingDescriptions.includes(descripcion)
+        );
 
-          
-        })
-        .catch((error) => {
-          console.error("Error de petición de rol al servidor:", error);
-        });
-    }
-  }, [usuario.rol]);
+        if (missingRoles.length > 0) {
+          await Promise.all(
+            missingRoles.map((descripcion) =>
+              fetch(BASE_URL + "/rol", {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ descripcion }),
+              })
+            )
+          );
+
+          const updatedResponse = await fetch(BASE_URL + "/rol");
+          const updatedData = await updatedResponse.json();
+          const updatedRoles = Array.isArray(updatedData) ? updatedData : [];
+
+          setRoles(
+            updatedRoles.filter((rol) =>
+              EMPLOYEE_ROLE_OPTIONS.includes(rol.descripcion?.toLowerCase())
+            )
+          );
+          return;
+        }
+
+        setRoles(
+          currentRoles.filter((rol) =>
+            EMPLOYEE_ROLE_OPTIONS.includes(rol.descripcion?.toLowerCase())
+          )
+        );
+      } catch (error) {
+        console.error("Error al cargar roles:", error);
+      }
+    };
+
+    loadRoles();
+  }, []);
 
   const handleInputChange = (event) => {
-    let { name, value } = event.target;
+    const { name, value } = event.target;
 
-    if (name === "rol" && mostrarSeleccionarRol) {
-      setMostrarSeleccionarRol(false);
+    if (name === "id") {
+      setUsuario((prevUsuario) => ({
+        ...prevUsuario,
+        [name]: value.replace(/\D/g, ""),
+      }));
+      return;
     }
 
-    if (name === "id" || name === "telefono") {
-      console.log("CASTING");
-      value = Number(value);
-    }
-
-    if (name === "cuit") {
-      value = String(value);
+    if (name === "telefono") {
+      setUsuario((prevUsuario) => ({
+        ...prevUsuario,
+        [name]: value.replace(/[^\d+]/g, "").slice(0, 15),
+      }));
+      return;
     }
 
     setUsuario((prevUsuario) => ({
@@ -59,81 +97,59 @@ const User = () => {
     }));
   };
 
-const handleConfirmar = (e) => {
+  const handleConfirmar = async (e) => {
     e.preventDefault();
 
-    console.log("Enviando datos:", usuario);
+    const payload = {
+      ...usuario,
+      id: Number(usuario.id),
+      rol: Number(usuario.rol),
+      telefono: Number(usuario.telefono.trim()),
+    };
 
-    fetch(BASE_URL + "/usuario/clientes", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-
-      body: JSON.stringify(usuario),
-    })
-      .then((response) => {
-        console.log("Response status:", response.status);
-        return response.json().then(data => ({ status: response.status, data }));
-      })
-      .then(({ status, data }) => {
-        console.log("Datos recibidos:", data);
-
-        if (status >= 400) {
-          alert("Error: " + (data.error || "Error desconocido"));
-          return;
-        }
-
-        formRef.current.reset();
-
-        setUsuario({
-          id: "",
-          first_name: "",
-          last_name: "",
-          email: "",
-          password: "",
-          cif: "",
-          telefono: "",
-          condicion_iva: "",
-          rol: 0,
-        });
-  
-
-        setMostrarSeleccionarRol(true);
-
-        alert("registro de usuario exitoso ! ");
-
-      })
-      .catch((error) => {
-        console.error("Error de petición al servidor:", error);
-        alert("Error de conexión");
-      });
-  };
-
- 
-
-  const handleCancelar = () => {
-    setUsuario({
-      nombre: "",
-      apellido: "",
-      email: "",
-      contraseña: "",
-      cuit: "",
-      telefono: "",
-      condicion_iva: "",
-      rol: "cliente",
-    });
-  };
-  /*
-  const FormHandler = (e) => {
-     e.preventDefault();
-
-    if (!nombre || !apellido || !telefono || !email || !password) {
-      setError("Por favor complete todos los campos");
+    if (
+      !payload.id ||
+      !payload.first_name.trim() ||
+      !payload.last_name.trim() ||
+      !payload.email.trim() ||
+      !payload.password ||
+      !payload.telefono ||
+      !payload.rol
+    ) {
+      alert("Completa todos los campos requeridos.");
       return;
     }
+
+    try {
+      const response = await fetch(BASE_URL + "/usuario", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        alert("Error: " + (data.error || "No se pudo registrar el empleado."));
+        return;
+      }
+
+      formRef.current?.reset();
+      setUsuario(initialUsuario);
+      alert("Registro de usuario exitoso.");
+    } catch (error) {
+      console.error("Error de peticion al servidor:", error);
+      alert("Error de conexion");
+    }
   };
-*/
+
+  const handleCancelar = () => {
+    formRef.current?.reset();
+    setUsuario(initialUsuario);
+  };
+
   return (
     <div className="userWraper">
       <h1>Registro de Usuario</h1>
@@ -142,10 +158,12 @@ const handleConfirmar = (e) => {
         <div className="form-group">
           <label htmlFor="rol">Rol</label>
           <select name="rol" value={usuario.rol} onChange={handleInputChange}>
-            <option value="">Seleccionar Rol</option>
-            <option value={1}>Técnico</option>
-            <option value={2}>Administrativo</option>
-            <option value={3}>Atención al Cliente</option>
+            <option value="">Seleccionar rol</option>
+            {roles.map((rol) => (
+              <option key={rol.id_rol} value={rol.id_rol}>
+                {rol.descripcion}
+              </option>
+            ))}
           </select>
         </div>
 
@@ -153,14 +171,16 @@ const handleConfirmar = (e) => {
           <label htmlFor="id"></label>
           <input
             type="text"
+            inputMode="numeric"
             placeholder="DNI"
             value={usuario.id}
             name="id"
             onChange={handleInputChange}
           />
         </div>
+
         <div className="form-group">
-          <label htmlFor="nombre"></label>
+          <label htmlFor="first_name"></label>
           <input
             type="text"
             placeholder="Nombre"
@@ -171,7 +191,7 @@ const handleConfirmar = (e) => {
         </div>
 
         <div className="form-group">
-          <label htmlFor="apellido"></label>
+          <label htmlFor="last_name"></label>
           <input
             type="text"
             placeholder="Apellido"
@@ -184,7 +204,7 @@ const handleConfirmar = (e) => {
         <div className="form-group">
           <label htmlFor="email"></label>
           <input
-            type="text"
+            type="email"
             placeholder="Email"
             value={usuario.email}
             name="email"
@@ -193,24 +213,12 @@ const handleConfirmar = (e) => {
         </div>
 
         <div className="form-group">
-          <label htmlFor="contraseña"></label>
+          <label htmlFor="password"></label>
           <input
             type="password"
-            placeholder="Contraseña"
+            placeholder="Contrasena"
             value={usuario.password}
             name="password"
-            onChange={handleInputChange}
-          />
-        </div>
-
-        <div className="form-group">
-          <label htmlFor="cuit"></label>
-          <input
-            type="text"
-            inputMode="numeric"
-            placeholder="Cuit"
-            value={usuario.cuit}
-            name="cuit"
             onChange={handleInputChange}
           />
         </div>
@@ -219,37 +227,25 @@ const handleConfirmar = (e) => {
           <label htmlFor="telefono"></label>
           <input
             type="text"
-            inputMode="numeric"
-            placeholder="telefono"
+            inputMode="tel"
+            placeholder="Telefono"
             value={usuario.telefono}
             name="telefono"
             onChange={handleInputChange}
           />
         </div>
 
-        <div className="form-group">
-          <label htmlFor="condicion_iva"></label>
-          <input
-            type="text"
-            placeholder="condicion_iva"
-            value={usuario.condicion_iva}
-            name="condicion_iva"
-            onChange={handleInputChange}
-          />
-        </div>
-
-        {/*    {error && <p className="error"> {error} </p>} */}
-
         <div className="confirm">
           <button type="button" onClick={handleCancelar}>
             Cancelar
           </button>
-          <button ref={formRef} type="submit" onClick={handleConfirmar}>
-            Confirmar
-          </button>
+          <button type="submit">Confirmar</button>
         </div>
       </form>
-      <Link to="/admin" className="backBtn">← Volver al Admin</Link>
+
+      <Link to="/admin" className="backBtn">
+        Volver al Admin
+      </Link>
     </div>
   );
 };

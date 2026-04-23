@@ -1,7 +1,11 @@
 import { Handler, RequestParamHandler } from "express";
 import { prisma } from "..";
 import { CustomError, ReceptionRequest, SD } from "../interfaces/interfaces";
-import { Recepcion } from "@prisma/client";
+import { Prisma, Recepcion } from "@prisma/client";
+
+type EmployeeWithRole = Prisma.UsuarioGetPayload<{
+  include: { Rol: true };
+}>;
 
 export class Reception {
   static index: Handler = async (req, res, next) => {
@@ -19,6 +23,16 @@ export class Reception {
               createdAt: true,
               updatedAt: true,
               Rol: true,
+            },
+          },
+          presupuestos: {
+            select: {
+              id: true,
+              descripcion: true,
+              estado: true,
+              confirmado: true,
+              createdAt: true,
+              updatedAt: true,
             },
           },
         },
@@ -41,18 +55,20 @@ export class Reception {
   static create: Handler = async (req, res, next) => {
     let data: Omit<Recepcion, "id" | "createdAt" | "updatedAt"> = req.body;
 
-    let employee = await prisma.usuario.findFirst({
-      where: {
-        id: data.employee_id,
-      },
-      include: {
-        Rol: true,
-      },
-    });
-    if (employee?.Rol.descripcion !== SD.ROLES.EMPLOYEE) {
-      let err = new CustomError("Ese usuario no es un empleado");
-      err.name = "400";
-      return next(err);
+    if (data.employee_id != null) {
+      let employee: EmployeeWithRole | null = await prisma.usuario.findFirst({
+        where: {
+          id: data.employee_id,
+        },
+        include: {
+          Rol: true,
+        },
+      });
+      if (!employee || !SD.EMPLOYEE_ROLE_DESCRIPTIONS.includes(employee.Rol.descripcion)) {
+        let err = new CustomError("Ese usuario no es un empleado");
+        err.name = "400";
+        return next(err);
+      }
     }
 
     try {
@@ -129,6 +145,16 @@ export class Reception {
               createdAt: true,
               updatedAt: true,
               Rol: true,
+            },
+          },
+          presupuestos: {
+            select: {
+              id: true,
+              descripcion: true,
+              estado: true,
+              confirmado: true,
+              createdAt: true,
+              updatedAt: true,
             },
           },
         },

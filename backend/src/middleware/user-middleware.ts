@@ -27,6 +27,11 @@ import { prisma } from "..";
 
 export const validateUserFields: Handler = async (req, res, next) => {
     let data: Usuario = req.body;
+
+    if (!data.cuit && data.id) {
+        data.cuit = `dni-${data.id}`;
+    }
+
     // validate email
     let emailValidated = EmailValidator.validate(data.email);
     if (!emailValidated) {
@@ -46,7 +51,7 @@ export const validateUserFields: Handler = async (req, res, next) => {
     }
     try {
         if (!data.rol) {
-            let defaultRol = await Rol.findByDescripcion('client');
+            let defaultRol = await Rol.findByDescripcion(SD.ROLES.CLIENT);
             if (!defaultRol) {
                 let err = new CustomError('No pudimos encontrar un rol para asignarle a ese usuario');
                 err.name = '404';
@@ -64,6 +69,10 @@ export const validateUserFields: Handler = async (req, res, next) => {
  * Populate req.body.rol with id_rol corresponding to role in URL
  */
 export const extractRoleFromUrl: Handler = async (req, res, next) => {
+    if (req.body.rol) {
+        return next();
+    }
+
     for (let [key, role] of Object.entries(SD.ROLES)) {
         if (req.url.includes(role.toLowerCase())) {
             let rol = await prisma.rol.findFirst({

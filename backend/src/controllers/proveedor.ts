@@ -1,22 +1,22 @@
 import { Handler, RequestParamHandler } from "express";
 import { prisma } from "..";
-import { CustomError, proveedorRequest, SD } from "../interfaces/interfaces";
+import { CustomError, proveedorRequest } from "../interfaces/interfaces";
 import { Proveedor } from "@prisma/client";
+import * as EmailValidator from "email-validator";
 
 export class Proveedores {
   static index: Handler = async (req, res, next) => {
     try {
-      let prov = await prisma.proveedor.findMany({
+      const proveedores = await prisma.proveedor.findMany({
+        include: {
+          Materials: true,
+        },
+        orderBy: {
+          createdAt: "desc",
+        },
+      });
 
-      include: {
-          
-Materials:true,
-      },
-    });
-
-
-
-      res.json(prov);
+      res.json(proveedores);
     } catch (e) {
       next(e);
     } finally {
@@ -24,39 +24,80 @@ Materials:true,
     }
   };
 
-  //////
   static show: Handler = async (req: proveedorRequest, res, next) => {
     prisma.$disconnect();
 
     if (!req.Proveedores) return next(new Error());
 
-    res.json(req.Proveedores);
+    res.json(req.Proveedores[0]);
   };
-  
+
   static create: Handler = async (req, res, next) => {
-    let data: Omit<Proveedor, 'id' | 'createdAt' | 'updatedAt'> = req.body;
+    const data: Omit<Proveedor, "id" | "createdAt" | "updatedAt"> = req.body;
+
+    if (!data.name?.trim() || !data.email?.trim() || !String(data.telefono).trim() || !data.detalles?.trim()) {
+      const err = new CustomError("Todos los campos del proveedor son obligatorios");
+      err.name = "400";
+      return next(err);
+    }
+
+    if (!EmailValidator.validate(data.email)) {
+      const err = new CustomError("Email invalido");
+      err.name = "400";
+      return next(err);
+    }
 
     try {
-      let prov = await prisma.proveedor.create({ data });
-      res.json(prov);
+      const proveedor = await prisma.proveedor.create({
+        data: {
+          ...data,
+          name: data.name.trim(),
+          email: data.email.trim().toLowerCase(),
+          detalles: data.detalles.trim(),
+          telefono: Number(data.telefono),
+        },
+      });
+
+      res.json(proveedor);
     } catch (e) {
       next(e);
     }
   };
 
-
-
   public static update: Handler = async (req: proveedorRequest, res, next) => {
+    if (!req.Proveedores) return;
 
-    let data: Omit<Proveedor, 'createdAt' | 'updatedAt'>  = req.body;
+    const old = req.Proveedores[0];
+    const data: Omit<Proveedor, "createdAt" | "updatedAt"> = req.body;
+
+    if (!data.name?.trim() || !data.email?.trim() || !String(data.telefono).trim() || !data.detalles?.trim()) {
+      const err = new CustomError("Todos los campos del proveedor son obligatorios");
+      err.name = "400";
+      return next(err);
+    }
+
+    if (!EmailValidator.validate(data.email)) {
+      const err = new CustomError("Email invalido");
+      err.name = "400";
+      return next(err);
+    }
+
     try {
-      let prov = await prisma.proveedor.update({
+      const proveedor = await prisma.proveedor.update({
         where: {
-          id: data.id,
+          id: old.id,
         },
-        data,
+        data: {
+          ...data,
+          id: old.id,
+          name: data.name.trim(),
+          email: data.email.trim().toLowerCase(),
+          detalles: data.detalles.trim(),
+          telefono: Number(data.telefono),
+        },
       });
-      res.json(prov);
+
+      res.json(proveedor);
     } catch (e) {
       next(e);
     } finally {
@@ -65,41 +106,40 @@ Materials:true,
   };
 
   public static delete: Handler = async (req: proveedorRequest, res, next) => {
-
     if (!req.Proveedores) return;
+
     try {
-      await prisma.recepcion.delete({
+      await prisma.proveedor.delete({
         where: {
           id: req.Proveedores[0].id,
         },
       });
+
       res.send();
     } catch (e) {
       next(e);
     } finally {
       prisma.$disconnect();
     }
-  }
-
-
-  ///////////////////////
+  };
 
   public static proveedoresRequestHandler: RequestParamHandler = async (
     req: proveedorRequest,
     res,
     next,
-    proveedor_id
+    id
   ) => {
-    let prov: Proveedor | null;
-    let validated = parseInt(proveedor_id);
+    let proveedor: Proveedor | null;
+    const validated = parseInt(id);
+
     if (isNaN(validated)) {
-      let err = new CustomError("proveedorId debe ser int");
+      const err = new CustomError("proveedorId debe ser int");
       err.name = "400";
       return next(err);
     }
 
     try {
-      prov = await prisma.proveedor.findUnique({
+      proveedor = await prisma.proveedor.findUnique({
         where: {
           id: validated,
         },
@@ -111,13 +151,13 @@ Materials:true,
       return next(e);
     }
 
-    if (!prov) {
-      let err = new CustomError("Proveedor no encontrado");
+    if (!proveedor) {
+      const err = new CustomError("Proveedor no encontrado");
       err.name = "404";
       return next(err);
     }
-    req.Proveedores = [prov];
 
+    req.Proveedores = [proveedor];
     next();
   };
 }

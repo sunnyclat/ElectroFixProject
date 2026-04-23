@@ -28,9 +28,23 @@ export class User {
 
   static listByRole: Handler = async (req, res, next) => {
     try {
+      const roleDescriptions = Array.isArray(req.body?.roleDescriptions)
+        ? req.body.roleDescriptions
+        : undefined;
+
       let users = await prisma.usuario.findMany({
         where: {
-          rol: req.body.rol
+          ...(roleDescriptions
+            ? {
+                Rol: {
+                  descripcion: {
+                    in: roleDescriptions,
+                  },
+                },
+              }
+            : {
+                rol: req.body.rol,
+              }),
         },
         include: {
           Rol: true,
@@ -46,6 +60,10 @@ export class User {
 
   static create: Handler = async (req, res, next) => {
     let data: Omit<Usuario, 'createdAt' | 'updatedAt'>  = req.body;
+
+    if (!data.cuit) {
+      data.cuit = `dni-${data.id}`;
+    }
 
     data.password = Auth.hashPassword(data.password);
 

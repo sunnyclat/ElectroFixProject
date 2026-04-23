@@ -1,10 +1,13 @@
-@import '../../assets/scss/colors.scss';
+@import "../../assets/scss/colors.scss";
 @import "../../assets/scss/fonts.scss";
 
-.budgetWrapper{
-  .homeBtn{
+.budgetWrapper {
+  max-width: 75rem;
+  margin: 0 auto;
+  padding-bottom: 2rem;
+
+  .homeBtn {
     font-family: $primary-font;
-    margin-left: 45%;
     color: white;
     background-color: #333;
     padding: 0.75rem 1.5rem;
@@ -12,24 +15,24 @@
     text-decoration: none;
     display: inline-block;
     margin-top: 1rem;
-    &:hover{
-        background-color: #555;
+
+    &:hover {
+      background-color: #555;
     }
   }
-
 }
 
-.budgetTitle{
-    font: 100% $primary-font;
-    font-size: 3rem;
-    text-align: center;
-    color: $primary-color;
-    text-transform: uppercase;
-    font-weight: 600;
-    padding: 20px;
+.budgetTitle {
+  font: 100% $primary-font;
+  font-size: 3rem;
+  text-align: center;
+  color: $primary-color;
+  text-transform: uppercase;
+  font-weight: 600;
+  padding: 20px;
 }
 
-.budgetCost{
+.budgetCost {
   font: 100% $primary-font;
   font-size: 2rem;
   text-align: center;
@@ -38,50 +41,139 @@
   padding: 10px;
 }
 
-.budgetForm{
+.budgetForm {
+  font-family: $primary-font;
+  display: flex;
+  padding: 0;
+  margin: 0 auto;
+  flex-direction: column;
+  width: 45%;
+  gap: 15px;
+
+  .formTitle {
+    text-align: center;
+    color: $primary-color;
+    margin-bottom: 0.5rem;
+  }
+
+  .infoMessage {
+    text-align: center;
+    color: #1d5f2f;
+    background: #eef8f0;
+    border: 1px solid #b9dfc0;
+    border-radius: 8px;
+    padding: 0.75rem;
+  }
+
+  .formItem {
     font-family: $primary-font;
+    min-height: 2rem;
+    padding: 0.5rem;
+    border-radius: 5px;
+    border: solid 1px $primary-color;
+    width: 100%;
+
+    &:focus {
+      outline: none;
+    }
+  }
+
+  .descriptionInput {
+    min-height: 8rem;
+    resize: vertical;
+  }
+
+  .checkboxRow {
     display: flex;
-    padding: 0;
-    margin: 0;
-    flex-direction: column;
-    margin-left: 30%;
-    width: 40%;
-    gap: 15px;
+    align-items: center;
+    gap: 0.5rem;
+  }
 
-    .formItem{
-      font-family: $primary-font;
-      height: 2rem;
-      padding: 0.5rem;
-      border-radius: 5px;
-      border: solid 1px $primary-color;
-      width: 100%;
-      &:focus{
-          outline: none;
-      }
+  .materialsSelector {
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    padding: 1rem;
+    background: #fafafa;
+  }
+
+  .materialsTitle {
+    margin-bottom: 0.75rem;
+    color: $primary-color;
+    font-weight: 600;
+  }
+
+  .materialsGrid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0.5rem;
+  }
+
+  .materialOption {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+  }
+
+  .formActions {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .submitBtn,
+  .secondaryBtn {
+    font-family: $primary-font;
+    cursor: pointer;
+    text-transform: uppercase;
+    min-width: 10rem;
+    height: 2.75rem;
+    padding: 5px 15px;
+    border-radius: 5px;
+    margin-bottom: 20px;
+  }
+
+  .submitBtn {
+    background-color: $secondary-color;
+    border-style: none;
+
+    &:hover {
+      border: solid 2px $primary-color;
     }
+  }
 
-    #description{
-      height: 10rem;
-    }
+  .secondaryBtn {
+    background: #f2f2f2;
+    border: 1px solid #999;
+  }
 
-    .submitBtn{
-      font-family: $primary-font;
-      background-color: $secondary-color;
-      cursor: pointer;
-      border-style: none;
-      text-transform: uppercase;
-      width: 40%;
-      height: 2rem;
-      padding: 5px 15px;
-      border-radius: 5px;
-      margin-bottom: 20px;
-      &:hover{
-          border: solid 2px $primary-color;
-      }
-    }
+  .error {
+    text-align: center;
+    color: $primary-color;
+  }
+}
 
-    .error{
-      text-align: center;
-      color: $primary-color;
-    }    
+.budgetList {
+  margin-top: 2rem;
+
+  .listTitle {
+    text-align: center;
+    color: $primary-color;
+    margin-bottom: 1rem;
+    font-family: $primary-font;
+  }
+}
+
+.rowActions {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: center;
+
+  button {
+    padding: 0.45rem 0.75rem;
+    border: 1px solid $primary-color;
+    background: white;
+    border-radius: 5px;
+    cursor: pointer;
+  }
 }

@@ -1,11 +1,17 @@
+import { Handler } from "express";
 import { Rol } from "../controllers/rol";
 import { User } from "../controllers/user";
 import { requiresDescription } from "../middleware/rol-middleware";
 import { extractRoleFromUrl, validateUserFields } from "../middleware/user-middleware";
+import { SD } from "../interfaces/interfaces";
 
 const express = require('express');
 
 const router = express.Router();
+const includeEmployeeRoles: Handler = (req, res, next) => {
+  req.body.roleDescriptions = SD.EMPLOYEE_ROLE_DESCRIPTIONS;
+  next();
+};
 
 // ========= Rol =========
 
@@ -73,7 +79,7 @@ router.get('/usuario/clientes', extractRoleFromUrl, User.listByRole);
 /**
  * Ver empleados
  */
-router.get('/usuario/empleados', extractRoleFromUrl, User.listByRole);
+router.get('/usuario/empleados', includeEmployeeRoles, User.listByRole);
 
 router.param('dni', User.userRequestHandler);
 

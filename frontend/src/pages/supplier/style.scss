@@ -39,8 +39,16 @@
   margin: 0;
   width: 40%;
   gap: 15px;
+
+  h2 {
+    width: 100%;
+    text-align: center;
+    color: $primary-color;
+    margin: 0 0 0.5rem;
+  }
   
-  input {
+  input,
+  textarea {
     height: 2rem;
     padding: 0.5rem;
     border-radius: 5px;
@@ -51,20 +59,68 @@
     }
   }
 
+  textarea {
+    min-height: 6rem;
+    resize: vertical;
+  }
+
   .errorValidation{
     align-self: center;
     color:red;
   }
 
+  .formActions {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+
   .btnForm{
-    align-self: center;
     margin-top: 1rem;
-    width: 5rem;
+    width: 10rem;
     height: 3rem;
     border-radius: 5px;
     &:disabled{
       
       color: gray;
     }
+  }
+
+  .secondaryBtn {
+    margin-top: 1rem;
+    min-width: 10rem;
+    height: 3rem;
+    border-radius: 5px;
+    border: 1px solid #999;
+    background: #f2f2f2;
+    cursor: pointer;
+  }
+}
+
+.supplierList {
+  width: 100%;
+  margin-top: 2rem;
+
+  h2 {
+    text-align: center;
+    color: $primary-color;
+    margin-bottom: 1rem;
+  }
+}
+
+.rowActions {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: center;
+
+  button {
+    padding: 0.45rem 0.75rem;
+    border: 1px solid $primary-color;
+    background: white;
+    border-radius: 5px;
+    cursor: pointer;
   }
 }

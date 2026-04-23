@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import "./style.scss";
 
 const BASE_URL = "/api";
@@ -19,10 +20,20 @@ const ListaRecepciones = () => {
       });
   }, []);
 
+  const getLatestBudget = (reception) => {
+    if (!Array.isArray(reception.presupuestos) || reception.presupuestos.length === 0) {
+      return null;
+    }
+
+    return [...reception.presupuestos].sort(
+      (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+    )[0];
+  };
+
   return (
     <div className="listaPage">
-      <h1>Solicitudes de Diagnóstico</h1>
-      
+      <h1>Solicitudes de Diagnostico</h1>
+
       {loading ? (
         <p>Cargando...</p>
       ) : recepciones.length === 0 ? (
@@ -34,31 +45,54 @@ const ListaRecepciones = () => {
               <th>ID</th>
               <th>Nombre</th>
               <th>Email</th>
-              <th>Teléfono</th>
+              <th>Telefono</th>
               <th>Equipo</th>
-              <th>Tipo</th>
-              <th>Descripción</th>
-              <th>Fecha</th>
+              <th>Descripcion</th>
+              <th>Fecha visita</th>
+              <th>Presupuesto</th>
+              <th>Estado</th>
+              <th>Accion</th>
             </tr>
           </thead>
           <tbody>
-            {recepciones.map((rec) => (
-              <tr key={rec.id}>
-                <td>{rec.id}</td>
-                <td>{rec.first_name} {rec.last_name}</td>
-                <td>{rec.email}</td>
-                <td>{rec.telefono}</td>
-                <td>{rec.equipo}</td>
-                <td>{rec.tipo}</td>
-                <td>{rec.descripcion}</td>
-                <td>{rec.createdAt ? new Date(rec.createdAt).toLocaleDateString() : '-'}</td>
-              </tr>
-            ))}
+            {recepciones.map((rec) => {
+              const latestBudget = getLatestBudget(rec);
+
+              return (
+                <tr key={rec.id}>
+                  <td>{rec.id}</td>
+                  <td>
+                    {rec.first_name} {rec.last_name}
+                  </td>
+                  <td>{rec.email}</td>
+                  <td>{rec.telefono}</td>
+                  <td>{rec.equipo}</td>
+                  <td>{rec.descripcion}</td>
+                  <td>
+                    {rec.fecha_visita
+                      ? new Date(rec.fecha_visita).toLocaleDateString()
+                      : "-"}
+                  </td>
+                  <td>{latestBudget ? `#${latestBudget.id}` : "Sin presupuesto"}</td>
+                  <td>{latestBudget ? latestBudget.estado : "-"}</td>
+                  <td>
+                    <Link
+                      to={`/presupuesto?recepcionId=${rec.id}`}
+                      className="actionLink"
+                    >
+                      {latestBudget ? "Ver presupuesto" : "Crear presupuesto"}
+                    </Link>
+                  </td>
+                </tr>
+              );
+            })}
           </tbody>
         </table>
       )}
-      
-      <a href="/admin" className="backBtn">← Volver al Admin</a>
+
+      <a href="/admin" className="backBtn">
+        Volver al Admin
+      </a>
     </div>
   );
 };

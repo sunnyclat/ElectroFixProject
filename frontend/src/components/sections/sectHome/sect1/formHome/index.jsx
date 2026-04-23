@@ -19,7 +19,7 @@ const FormHome = () => {
   const [error, setError] = useState("");
 
   const handleInputChange = (event) => {
-    const { name, value } = event.target;
+    const { name, value, type } = event.target;
     setFormData((prev) => ({
       ...prev,
       [name]: value
@@ -37,7 +37,8 @@ const FormHome = () => {
       telefono: formData.telefono,
       equipo: formData.equipo,
       tipo: formData.tipo,
-      descripcion: formData.descripcion
+      descripcion: formData.descripcion,
+      fecha_visita: formData.fecha ? new Date(formData.fecha).toISOString() : null
     };
 
     fetch("/api/recepcion", {
@@ -83,7 +84,7 @@ const FormHome = () => {
   return (
     <form className="formHome" onSubmit={handleSubmit}>
       <Form
-        name={"fName"}
+        name={"first_name"}
         text={"Nombre"}
         type={"text"}
         placeholder={"Introduce tu nombre"}
@@ -99,15 +100,15 @@ const FormHome = () => {
         onChange={handleInputChange}
       />
       <Form
-        name={"celNumber"}
+        name={"telefono"}
         text={"Número de contacto"}
         type={"tel"}
         placeholder={"Introduce tu número de contacto"}
         value={formData.telefono}
-        onChange={(e) => setFormData(prev => ({ ...prev, telefono: e.target.value }))}
+        onChange={handleInputChange}
       />
       <Form
-        name={"description"}
+        name={"descripcion"}
         text={"Descripción de la falla"}
         type={"text"}
         placeholder={"Describe brevemente la falla de tu equipo"}
@@ -118,7 +119,7 @@ const FormHome = () => {
         <div className="block1">
           <p>Selecciona equipo</p>
           <select 
-            name="products" 
+            name="equipo" 
             id="products"
             value={formData.equipo}
             onChange={handleInputChange}
@@ -133,13 +134,15 @@ const FormHome = () => {
             <option value="microondas">Microondas</option>
             <option value="otro">Otro</option>
           </select>
-          <Form
-            className={"calendar"}
-            type={"date"}
-            text={"Programa una visita"}
-            value={formData.fecha}
-            onChange={handleInputChange}
-          />
+          <div className="form">
+            <p>Programa una visita</p>
+            <input 
+              type="date" 
+              name="fecha" 
+              value={formData.fecha} 
+              onChange={handleInputChange}
+            />
+          </div>
         </div>
         <div className="block2">
           <Button type={"submit"} className={"sendForm"}>Enviar</Button>

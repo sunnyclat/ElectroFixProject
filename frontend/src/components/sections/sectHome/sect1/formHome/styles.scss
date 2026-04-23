@@ -37,6 +37,19 @@
           color: $black;
         }
       }
+      input[type="date"] {
+        width: 100%;
+        height: 30px;
+        border-radius: 50px;
+        padding-left: 1rem;
+        background-color: $black;
+        color: $white;
+        border: none;
+        margin-top: 0.5rem;
+        &::-webkit-calendar-picker-indicator {
+          filter: invert(1);
+        }
+      }
     }
     .block2 {
       width: 50%;
