@@ -1,0 +1,104 @@
+Orden recomendado
+
+1 Proveedores
+Porque materiales depende bastante de tener proveedor asociado.
+
+2 Materiales
+Una vez que existan proveedores, ya podés cargar stock, costo y relaciones reales.
+
+3 Presupuestos
+Esto conviene dejarlo para después, porque suele depender de:
+recepciones + materiales + posibles reparaciones/ítems + estado/aprobación.
+
+
+Flujo ideal del sistema
+
+1 El cliente deja una solicitud en recepcion.
+2 En admin ves esa recepción.
+3 Desde esa recepción generás un presupuesto.
+4 El presupuesto usa:
+
+materiales cargados
+costos
+reparaciones/servicios
+estado
+
+5 Si se aprueba, después eso impacta en stock o seguimiento.
+
+
+Plan práctico de trabajo
+
+1 Hacer CRUD completo de proveedores.
+Crear, listar, editar, eliminar.
+
+2 Hacer CRUD completo de materiales.
+Con validaciones y selector real de proveedor.
+
+3 Revisar bien el modelo de presupuesto.
+
+Definir:
+recepcion asociada
+materiales usados
+mano de obra o reparación
+total
+estado
+confirmado
+
+4 Recién ahí hacer la UI de presupuestos.
+Primero crear presupuesto desde una recepción existente.
+Después listar, editar estado y confirmar.
+
+
+proveedores actualmente: crear, listar, editar, eliminar
+materiales actualmente: crear, listar, editar, eliminar
+
+integrados recepciones y presupuestos  (botón crear presupuesto en recepciones)
+
+las recepciones traen sus presupuestos asociados y se pueden ver el estado del presupuesto
+
+a hacer:
+1. colorear estados de presupuesto
+2. impedir crear múltiples presupuestos para la misma recepción si no querés duplicados
+
+
+--------------------------
+
+Ejemplo paso a paso para el flujo de trabajo en Electrofix:
+
+1. Crear un Proveedor (ej: en la página de proveedores)
+
+Name: "ElectroParts S.A."
+Teléfono: 1155551234
+Email: ventas@electroparts.com
+Detalles: "Distribuidor oficial de repuestos electrodomésticos"
+2. Crear Materiales vinculados al proveedor (ej: en la página de materiales) Material 1:
+
+Name: "Termostato para heladera"
+Descripción: "Termostato universal 120V/240V"
+Stock: 15
+Costo: 2500
+Proveedor: ElectroParts S.A. (seleccionado de dropdown)
+Material 2:
+
+Name: "Junta de puerta lavarropas"
+Descripción: "Junta de goma para lavarropas superior"
+Stock: 8
+Costo: 1800
+Proveedor: ElectroParts S.A.
+3. Crear un Presupuesto para una Recepción Al crear/editar presupuesto para una recepción:
+
+Descripción: "Heladera no enfría - revisar termostato y junta"
+Estado: "en_revision" (o pendiente/aprobado/rechazado)
+Materiales: ☑ Termostato para heladera ($2500) ☑ Junta de puerta lavarropas ($1800)
+Reparaciones Nomencladas (si existen): ☑ Diagnóstico eléctrico ($1500) ☑ Mano de obra 2hs ($2000)
+Total del presupuesto: $2500 + $1800 + $1500 + $2000 = $7800
+
+Relaciones clave:
+
+Los materiales siempre están vinculados a un proveedor (no se crean sueltos)
+El costo del material es fijo (se establece al crear el material)
+Al seleccionar materiales en el presupuesto, se usan esos costos predefinidos
+Las reparaciones nombradas tienen costos fijos independientes
+
+
+

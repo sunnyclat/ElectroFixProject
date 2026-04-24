@@ -1,3 +1,5 @@
+@import "../../assets/scss/colors.scss";
+
 .listaPage {
   padding: 2rem;
   margin-top: 8rem;
@@ -9,38 +11,58 @@
     font-size: 2rem;
     color: #333;
     margin-bottom: 2rem;
+    text-align: center;
   }
 
   .tablaUsuarios {
     width: 100%;
     background: white;
-    border-collapse: collapse;
+    border-collapse: separate;
+    border-spacing: 0;
     border-radius: 8px;
     overflow: hidden;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    margin-bottom: 2rem;
 
     thead {
       background-color: #ff6b35;
       color: white;
 
       th {
-        padding: 1rem;
+        padding: 1.25rem 1rem;
         text-align: left;
         font-family: 'Montserrat', sans-serif;
+        font-weight: 600;
+        text-transform: uppercase;
+        font-size: 0.9rem;
+        letter-spacing: 0.5px;
+        white-space: nowrap;
       }
     }
 
     tbody {
       tr {
         border-bottom: 1px solid #eee;
+        transition: background-color 0.2s ease;
 
         &:hover {
-          background-color: #f9f9f9;
+          background-color: #f1f9ff;
+        }
+
+        &:nth-child(even) {
+          background-color: #fafafa;
         }
 
         td {
-          padding: 1rem;
+          padding: 1.25rem 1rem;
           color: #333;
+          font-family: 'Montserrat', sans-serif;
+          font-size: 0.95rem;
+
+          &:first-child {
+            font-weight: 500;
+            color: #ff6b35;
+          }
         }
       }
     }
@@ -55,9 +77,36 @@
     text-decoration: none;
     border-radius: 4px;
     font-family: 'Montserrat', sans-serif;
+    font-weight: 500;
+    transition: all 0.2s ease;
 
     &:hover {
       background-color: #555;
+      transform: translateY(-2px);
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+  }
+
+  .deleteBtn {
+    background-color: #e74c3c;
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-size: 0.875rem;
+
+    &:hover {
+      background-color: #c0392b;
+      transform: translateY(-2px);
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    &:active {
+      transform: translateY(0);
     }
   }
 }

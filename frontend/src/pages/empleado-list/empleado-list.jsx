@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import "./style.scss";
 
 const BASE_URL = "/api";
@@ -19,6 +20,26 @@ const ListaEmpleados = () => {
       });
   }, []);
 
+  const deleteEmpleado = async (id) => {
+    if (window.confirm("¿Estás seguro de que quieres eliminar este empleado?")) {
+      try {
+        const response = await fetch(BASE_URL + `/usuario/${id}`, {
+          method: "DELETE",
+        });
+
+        if (!response.ok) {
+          throw new Error("Error al eliminar el empleado");
+        }
+
+        // Remove the deleted empleado from the state
+        setEmpleados(prevEmpleados => prevEmpleados.filter(e => e.id !== id));
+      } catch (error) {
+        console.error("Error deleting empleado:", error);
+        alert("Error al eliminar el empleado. Por favor, inténtalo de nuevo.");
+      }
+    }
+  };
+
   return (
     <div className="listaPage">
       <h1>Lista de Empleados</h1>
@@ -37,6 +58,7 @@ const ListaEmpleados = () => {
               <th>Email</th>
               <th>Teléfono</th>
               <th>Rol</th>
+              <th>Acciones</th>
             </tr>
           </thead>
           <tbody>
@@ -48,6 +70,15 @@ const ListaEmpleados = () => {
                 <td>{emp.email}</td>
                 <td>{emp.telefono}</td>
                 <td>{emp.Rol?.descripcion || emp.rol}</td>
+                <td className="actionButtons">
+                  <Link to={`/empleado/${emp.id}`} className="actionLink">Editar</Link>
+                  <button 
+                    onClick={() => deleteEmpleado(emp.id)}
+                    className="deleteBtn"
+                  >
+                    Eliminar
+                  </button>
+                </td>
               </tr>
             ))}
           </tbody>

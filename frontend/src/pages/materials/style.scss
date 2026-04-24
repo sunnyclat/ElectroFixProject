@@ -107,6 +107,59 @@
     color: $primary-color;
     margin-bottom: 1rem;
   }
+
+  table.tablaUsuarios {
+    width: 100%;
+    background: white;
+    border-collapse: separate;
+    border-spacing: 0;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+
+    thead {
+      background-color: $primary-color;
+      color: white;
+
+      th {
+        padding: 1.25rem 1rem;
+        text-align: left;
+        font-family: 'Montserrat', sans-serif;
+        font-weight: 600;
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        white-space: nowrap;
+      }
+    }
+
+    tbody {
+      tr {
+        border-bottom: 1px solid #eee;
+        transition: background-color 0.2s ease;
+
+        &:hover {
+          background-color: #f1f9ff;
+        }
+
+        &:nth-child(even) {
+          background-color: #fafafa;
+        }
+
+        td {
+          padding: 1.25rem 1rem;
+          color: #333;
+          font-family: 'Montserrat', sans-serif;
+          font-size: 0.95rem;
+
+          &:first-child {
+            font-weight: 500;
+            color: $primary-color;
+          }
+        }
+      }
+    }
+  }
 }
 
 .rowActions {
