@@ -2,6 +2,7 @@
 @import '../../assets//scss/fonts.scss';
 
 .employeesWraper{
+  padding: 20px;
   
   .homeBtn {
     font-family: $primary-font;
@@ -10,6 +11,16 @@
     &:hover {
       text-decoration: underline;
     }
+  }
+  
+  .success {
+    text-align: center;
+    color: #4caf50;
+    background-color: #e8f5e9;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #4caf50;
+    margin-bottom: 15px;
   }
 }
 
